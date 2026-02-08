@@ -1,6 +1,8 @@
 # loading in modules
 import sqlite3
 import pandas as pd
+import tkinter as tk
+from tkinter import messagebox
 #import sqlalchemy
 
 # creating file path
@@ -12,9 +14,38 @@ con = sqlite3.connect(dbfile)
 cur = con.cursor()
 
 # reading all table names
-table_list = [a for a in cur.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
+# table_list = [a for a in cur.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
 # here is you table list
 #print(table_list)
+
+#Testing tkinter
+def greet():
+    user_name = entry.get()
+    label_result.config(text=f"Hello, {user_name}!")
+
+#Create the main window
+root = tk.Tk()
+root.title("Greeting app")
+root.geometry("300x150")
+
+#Create a label
+label = tk.Label(root, text="Enter your name:")
+label.pack(pady=5)
+
+#Create an entry widget
+entry = tk.Entry(root)
+entry.pack(pady=5)
+
+#Create a button
+button = tk.Button(root, text="Greet", command=greet)
+button.pack(pady=5)
+
+#Create a label for the result
+label_result = tk.Label(root, text="")
+label_result.pack(pady=5)
+
+#Start the main loop
+root.mainloop()
 
 def getTotalNumberOfPlays():
     # Retrieve all session_id - game_id maps
@@ -78,6 +109,14 @@ def getPlayerStats(player_id):
     print(game_standings_percentages)
     #print(df)
 
+def getTopScoresForGame(game_id):
+    # Getting all entries for a certain game id
+    df = pd.read_sql_query('select g.name as Game, p.name as Player, gs.player_score, gs.player_standing ' \
+                            'from players p, gamesessions gs, games g' \
+                            ' where p.id = gs.player_id and g.id = gs.game_id and gs.game_id= %f order by player_score desc' %(game_id), con)
+    
+    print(df.head(5))
+
 def insertGameInCatalog():
     return
 
@@ -88,7 +127,9 @@ def insertGameSession():
     return
 
 #getTotalNumberOfPlays()
-getPlayerStats(1)
+#getPlayerStats(1)
+#getTopScoresForGame(1)
+
 
 # Be sure to close the connection
 con.close()
