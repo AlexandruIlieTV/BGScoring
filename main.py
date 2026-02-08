@@ -3,7 +3,7 @@ import sqlite3
 import pandas as pd
 import tkinter as tk
 from tkinter import messagebox
-#import sqlalchemy
+from db.repositories import PlayerRepository, GameRepository
 
 # creating file path
 dbfile = 'd:/eLearn/Projects/bgScores/bgScore.db'
@@ -13,13 +13,17 @@ con = sqlite3.connect(dbfile)
 # creating cursor
 cur = con.cursor()
 
-# reading all table names
-# table_list = [a for a in cur.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
-# here is you table list
-#print(table_list)
+players = PlayerRepository.get_all()
+for p in players:
+    print(p)
+
+GameRepository.add("Paladins of the West Kingdom", 1, 4, "Medieval", 2019)
+games = GameRepository.get_all()
+for g in games:
+    print(g)
 
 #Testing tkinter
-def greet():
+""" def greet():
     user_name = entry.get()
     label_result.config(text=f"Hello, {user_name}!")
 
@@ -45,7 +49,7 @@ label_result = tk.Label(root, text="")
 label_result.pack(pady=5)
 
 #Start the main loop
-root.mainloop()
+root.mainloop() """
 
 def getTotalNumberOfPlays():
     # Retrieve all session_id - game_id maps
@@ -117,14 +121,6 @@ def getTopScoresForGame(game_id):
     
     print(df.head(5))
 
-def insertGameInCatalog():
-    return
-
-def insertPlayer():
-    return
-
-def insertGameSession():
-    return
 
 #getTotalNumberOfPlays()
 #getPlayerStats(1)
