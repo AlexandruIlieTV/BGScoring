@@ -3,68 +3,60 @@ import sqlite3
 import pandas as pd
 import tkinter as tk
 from tkinter import messagebox
-from db.repositories import PlayerRepository, GameRepository
+from db.repositories import PlayerRepository, GameRepository, GameSessionRepository, PlayerSessionRepository
+from ui.main_window import MainWindow
+
+#import ui.main_window
+#print(dir(ui.main_window))
+
+
+
+if __name__ == "__main__":
+    app = MainWindow()
+    app.run()
+
 
 # creating file path
-dbfile = 'd:/eLearn/Projects/bgScores/bgScore.db'
+#dbfile = 'd:/eLearn/Projects/bgScores/bgScore.db'
 # Create a SQL connection to our SQLite database
-con = sqlite3.connect(dbfile)
+#con = sqlite3.connect(dbfile)
 
 # creating cursor
-cur = con.cursor()
+#cur = con.cursor()
 
-players = PlayerRepository.get_all()
-for p in players:
-    print(p)
-
-GameRepository.add("Paladins of the West Kingdom", 1, 4, "Medieval", 2019)
-games = GameRepository.get_all()
-for g in games:
-    print(g)
-
-#Testing tkinter
-""" def greet():
-    user_name = entry.get()
-    label_result.config(text=f"Hello, {user_name}!")
-
-#Create the main window
-root = tk.Tk()
-root.title("Greeting app")
-root.geometry("300x150")
-
-#Create a label
-label = tk.Label(root, text="Enter your name:")
-label.pack(pady=5)
-
-#Create an entry widget
-entry = tk.Entry(root)
-entry.pack(pady=5)
-
-#Create a button
-button = tk.Button(root, text="Greet", command=greet)
-button.pack(pady=5)
-
-#Create a label for the result
-label_result = tk.Label(root, text="")
-label_result.pack(pady=5)
-
-#Start the main loop
-root.mainloop() """
-
-def getTotalNumberOfPlays():
+""" def getTotalNumberOfPlays():
     # Retrieve all session_id - game_id maps
-    df = pd.read_sql_query('select session_id, game_id from gamesessions', con)
+    df = pd.read_sql_query('select gs.id, gs.game_id, g.title from gamesessions gs, games g where gs.game_id = g.id', con)
     
     # Get unique ids for sessions
-    distinctSessionsIds = df['session_id'].unique()
+    distinctSessionsIds = df['id'].unique()
     
     # Dropping duplicates for game_ids to count what are the number of plays for each game_id from the game catalog
     topPlayedGames = df.drop_duplicates()
-    topPlayedGames = topPlayedGames['game_id'].value_counts()
+    topPlayedGames = topPlayedGames['title'].value_counts()
     print("Total number of game sessions", len(distinctSessionsIds))
-    print(topPlayedGames)
+    print(topPlayedGames) """
 
-def getPlayerStats(player_id):
+""" getTotalNumberOfPlays()
+
+window = tk.Tk()
+window.title("Home page")
+window.geometry('340x440')
+#window.configure(bg='#333333')
+
+label = tk.Label(window, text="Most played games")
+# pack place grid
+
+label.pack() """
+
+
+
+
+
+
+
+
+""" def getPlayerStats(player_id):
     # Getting all entries for a certain player id
     df = pd.read_sql_query('select gs.session_id, g.name as Game, p.name as Player, gs.player_score, gs.player_standing ' \
                             'from players p, gamesessions gs, games g' \
@@ -111,16 +103,15 @@ def getPlayerStats(player_id):
     print(standings_stats)
     #print(pivot)
     print(game_standings_percentages)
-    #print(df)
+    #print(df) """
 
-def getTopScoresForGame(game_id):
+""" def getTopScoresForGame(game_id):
     # Getting all entries for a certain game id
     df = pd.read_sql_query('select g.name as Game, p.name as Player, gs.player_score, gs.player_standing ' \
                             'from players p, gamesessions gs, games g' \
                             ' where p.id = gs.player_id and g.id = gs.game_id and gs.game_id= %f order by player_score desc' %(game_id), con)
     
-    print(df.head(5))
-
+    print(df.head(5)) """
 
 #getTotalNumberOfPlays()
 #getPlayerStats(1)
@@ -128,4 +119,6 @@ def getTopScoresForGame(game_id):
 
 
 # Be sure to close the connection
-con.close()
+#con.close()
+
+#window.mainloop()
