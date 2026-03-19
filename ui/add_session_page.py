@@ -18,6 +18,16 @@ class AddSessionPage(tk.Frame):
 
         self.create_form()
 
+    def create_labeled_entry(self, label_text):
+        frame = tk.Frame(self)
+        frame.pack(pady=5)
+
+        tk.Label(frame, text=label_text, width=15, anchor="w").pack(side="left")
+        entry = tk.Entry(frame, width=20)
+        entry.pack(side="left")
+
+        return entry
+
     def create_player_section(self):
         container = tk.Frame(self)
         container.pack(pady=10, fill="both", expand=True)
@@ -48,7 +58,9 @@ class AddSessionPage(tk.Frame):
 
         game_data = self.games_dict[self.selected_game.get()]
         min_players = game_data[2]
+        #print(min_players)
         max_players = game_data[3]
+        #print(max_players)
 
         self.current_max_players = max_players
 
@@ -63,8 +75,6 @@ class AddSessionPage(tk.Frame):
 
         for i in range(min_players):
             self.add_player_row(all_players)
-
-
 
     def add_player_row(self, all_players):
 
@@ -111,7 +121,7 @@ class AddSessionPage(tk.Frame):
         )
         self.game_combobox.pack(pady=5)
 
-        #self.game_combobox.bind("<<ComboboxSelected>>", self.generate_player_rows)
+        self.game_combobox.bind("<<ComboboxSelected>>", self.generate_player_rows)
 
         # 🔹 Jucători
         tk.Label(self, text="Jucători și scoruri:").pack(pady=5)
@@ -127,7 +137,7 @@ class AddSessionPage(tk.Frame):
             values=list(self.games_dict.keys()),
             state="readonly"
         )
-        game_combobox.pack(pady=5)
+        #game_combobox.pack(pady=5)
 
         game_combobox.bind("<<ComboboxSelected>>", self.generate_player_rows)
 
@@ -135,12 +145,12 @@ class AddSessionPage(tk.Frame):
         self.generate_player_rows()
 
         # 🔹 Data
-        self.date_entry = tk.Entry(self)
+        self.date_entry = self.create_labeled_entry("Data:")
         self.date_entry.insert(0, str(date.today()))
         self.date_entry.pack(pady=5)
 
         # 🔹 Durata
-        self.duration_entry = tk.Entry(self)
+        self.duration_entry = self.create_labeled_entry("Durata:")
         self.duration_entry.insert(0, "60")
         self.duration_entry.pack(pady=5)
 
@@ -149,6 +159,13 @@ class AddSessionPage(tk.Frame):
             text="Salvează sesiune",
             command=self.save_session
         ).pack(pady=10)
+
+        tk.Button(
+            self,
+            text="Înapoi",
+            command=self.controller.show_home,
+            width=15
+        ).pack(pady=5)
 
     def save_session(self):
 

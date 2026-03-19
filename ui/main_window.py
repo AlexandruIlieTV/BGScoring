@@ -11,7 +11,7 @@ class MainWindow:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Board Game Tracker")
-        self.root.geometry("500x400")
+        self.root.geometry("500x650")
 
         self.current_frame = None
 
@@ -43,8 +43,8 @@ class MainWindow:
 
     def show_statistics(self):
         self.clear_frame()
-        self.current_page = StatisticsPage(self)
-        self.current_page.pack(fill="both", expand=True)
+        self.current_frame = StatisticsPage(self)
+        self.current_frame.pack(fill="both", expand=True)
 
     def run(self):
         self.root.mainloop()
