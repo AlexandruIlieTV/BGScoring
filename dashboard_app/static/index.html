@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board Game Dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Board Game History</p>
+        <h1>Sessions, rivals, favorites, and table trends in one place.</h1>
+        <p class="hero-text">
+          A browser-ready dashboard built on top of your existing SQLite data.
+        </p>
+      </div>
+      <div class="hero-panel">
+        <p class="panel-label">Latest session</p>
+        <h2 id="latest-session-title">Loading...</h2>
+        <p id="latest-session-meta" class="panel-meta"></p>
+      </div>
+    </header>
+
+    <main class="dashboard-grid">
+      <section class="summary-grid" id="summary-grid"></section>
+
+      <section class="card wide-card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Momentum</p>
+            <h2>Monthly activity</h2>
+          </div>
+        </div>
+        <div id="timeline" class="timeline"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Player explorer</p>
+            <h2>Focus on one player</h2>
+          </div>
+        </div>
+        <div class="control-row">
+          <label class="field-label" for="player-select">Choose player</label>
+          <select id="player-select"></select>
+        </div>
+        <div id="player-detail" class="detail-panel">
+          <p class="muted">Select a player to load detailed stats.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Game explorer</p>
+            <h2>Focus on one game</h2>
+          </div>
+        </div>
+        <div class="control-row">
+          <label class="field-label" for="game-select">Choose game</label>
+          <select id="game-select"></select>
+        </div>
+        <div id="game-detail" class="detail-panel">
+          <p class="muted">Select a game to load detailed stats.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Top games</p>
+            <h2>Most played titles</h2>
+          </div>
+        </div>
+        <div id="top-games" class="list-grid"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Top players</p>
+            <h2>Regulars and winners</h2>
+          </div>
+        </div>
+        <div id="top-players" class="list-grid"></div>
+      </section>
+
+      <section class="card wide-card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Manage data</p>
+            <h2>Add players, games, and sessions</h2>
+          </div>
+        </div>
+        <div class="form-grid">
+          <form id="add-player-form" class="entry-form">
+            <h3>Add player</h3>
+            <label class="field-label" for="player-name-input">Player name</label>
+            <input id="player-name-input" name="name" type="text" placeholder="New player name" required>
+            <button type="submit">Add player</button>
+            <p id="player-form-message" class="form-message"></p>
+          </form>
+
+          <form id="add-game-form" class="entry-form">
+            <h3>Add game</h3>
+            <label class="field-label" for="game-title-input">Title</label>
+            <input id="game-title-input" name="title" type="text" placeholder="Game title" required>
+            <label class="field-label" for="game-min-input">Minimum players</label>
+            <input id="game-min-input" name="min_players" type="number" min="1" required>
+            <label class="field-label" for="game-max-input">Maximum players</label>
+            <input id="game-max-input" name="max_players" type="number" min="1" required>
+            <label class="field-label" for="game-theme-input">Theme</label>
+            <input id="game-theme-input" name="game_theme" type="text" placeholder="Theme or category">
+            <label class="field-label" for="game-year-input">Release year</label>
+            <input id="game-year-input" name="year_of_release" type="number" min="0" required>
+            <button type="submit">Add game</button>
+            <p id="game-form-message" class="form-message"></p>
+          </form>
+
+          <form id="add-session-form" class="entry-form session-form">
+            <h3>Add game session</h3>
+            <label class="field-label" for="session-game-select">Game</label>
+            <select id="session-game-select" name="game_title"></select>
+            <label class="field-label" for="session-date-input">Date</label>
+            <input id="session-date-input" name="session_date" type="date" required>
+            <label class="field-label" for="session-duration-input">Duration (minutes)</label>
+            <input id="session-duration-input" name="game_duration" type="number" min="1" value="60" required>
+            <div class="session-toolbar">
+              <span id="session-player-range" class="muted"></span>
+              <button type="button" id="add-session-player-row" class="secondary-button">Add player row</button>
+            </div>
+            <div id="session-player-rows" class="session-player-rows"></div>
+            <button type="submit">Add session</button>
+            <p id="session-form-message" class="form-message"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="card wide-card">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Recent table</p>
+            <h2>Latest sessions</h2>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Game</th>
+                <th>Date</th>
+                <th>Players</th>
+                <th>Duration</th>
+                <th>Roster</th>
+              </tr>
+            </thead>
+            <tbody id="recent-sessions"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/dashboard.js"></script>
+</body>
+</html>

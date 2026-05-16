@@ -4,6 +4,8 @@ from ui.add_game_page import AddGamePage
 from ui.add_player_page import AddPlayerPage
 from ui.add_session_page import AddSessionPage
 from ui.statistics_page import StatisticsPage
+from ui.player_statistics_page import PlayerStatisticsPage
+from ui.game_statistics_page import GameStatisticsPage
 
 
 class MainWindow:
@@ -44,6 +46,16 @@ class MainWindow:
     def show_statistics(self):
         self.clear_frame()
         self.current_frame = StatisticsPage(self)
+        self.current_frame.pack(fill="both", expand=True)
+
+    def show_player_statistics(self):
+        self.clear_frame()
+        self.current_frame = PlayerStatisticsPage(self)
+        self.current_frame.pack(fill="both", expand=True)
+
+    def show_game_statistics(self):
+        self.clear_frame()
+        self.current_frame = GameStatisticsPage(self)
         self.current_frame.pack(fill="both", expand=True)
 
     def run(self):

@@ -38,7 +38,7 @@ class GameRepository:
         conn = get_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM games")
+        cursor.execute("SELECT * FROM games ORDER BY title")
         games = cursor.fetchall()
 
         conn.close()
